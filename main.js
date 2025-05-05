@@ -20,14 +20,25 @@ document.addEventListener("DOMContentLoaded", () => {
         ball.style.left = `${ballX}px`;
         ball.style.top = `${ballY}px`;
 
+        if(ballX < paddle.offsetLeft + paddle.offsetWidth && ballY > paddle.offsetTop && ballY - ball.offsetHeight < paddle.offsetTop + paddle.offsetHeight) {
+            /**
+             * !! Condition logic !!
+             * * 1.Checks if ball's left edge is to the left of paddle's right edge
+             * * 2.Checks if ball's top edge is below paddle's top edge
+             * * 3.Checks if ball's bottom edge is above paddle's bottom edge
+             */
+            dx *= -1;
+        }
+
         if(ballX > table.offsetWidth - ball.offsetWidth || ballX <= 0) dx *= -1;
         if(ballY > table.offsetHeight - ball.offsetHeight || ballY <= 0) dy *= -1;
     }, 5);
 
 
     let paddleY = 0;
-    let dPy = 5;
+    let dPy = 10;
     document.addEventListener('keydown', (event) => {
+        event.preventDefault();
         if(event.keyCode == 38 && paddleY > 0) {
             // up arrow pressed
             paddleY += (-1)*dPy;
