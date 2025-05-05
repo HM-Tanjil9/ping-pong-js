@@ -20,7 +20,7 @@ document.addEventListener("DOMContentLoaded", () => {
         ball.style.left = `${ballX}px`;
         ball.style.top = `${ballY}px`;
 
-        if(ballX < paddle.offsetLeft + paddle.offsetWidth && ballY > paddle.offsetTop && ballY - ball.offsetHeight < paddle.offsetTop + paddle.offsetHeight) {
+        if(ballX < paddle.offsetLeft + paddle.offsetWidth && ballY > paddle.offsetTop && ballY + ball.offsetHeight < paddle.offsetTop + paddle.offsetHeight) {
             /**
              * !! Condition logic !!
              * * 1.Checks if ball's left edge is to the left of paddle's right edge
@@ -37,6 +37,7 @@ document.addEventListener("DOMContentLoaded", () => {
 
     let paddleY = 0;
     let dPy = 10;
+    // add keyboard control
     document.addEventListener('keydown', (event) => {
         event.preventDefault();
         if(event.keyCode == 38 && paddleY > 0) {
@@ -49,6 +50,23 @@ document.addEventListener("DOMContentLoaded", () => {
             // down arrow pressed
             paddleY += dPy;
         }
+        paddle.style.top = `${paddleY}px`;
+    });
+    // add mouse control
+    document.addEventListener('mousemove', (event) => {
+        // close to paddle
+        if(event.clientX > table.offsetLeft + (table.offsetWidth/2)) return;        
+        // get mouse position
+        let mouseDistanceFromTop = event.clientY;
+        // get table top position
+        let distanceOfTableFromTop = table.offsetTop;
+        // calculate paddle position
+        let mousePointControl = mouseDistanceFromTop - distanceOfTableFromTop - paddle.offsetHeight/2;
+        // apply position
+        paddleY = mousePointControl;
+        // boundary check
+        if(paddleY <= 0 || paddleY > table.offsetHeight - paddle.offsetHeight) return;
+        // update paddle position
         paddle.style.top = `${paddleY}px`;
     })
 });
